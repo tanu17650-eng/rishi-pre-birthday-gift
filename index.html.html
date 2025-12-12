@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rishi's Pre-Birthday Gift</title>
+<style>
+  :root{--bg1:#fff0f6;--accent:#ff4d6d;--deep:#5b1730}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, Poppins, Arial, sans-serif;background:linear-gradient(180deg,#fff6fb,#ffeef6);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;color:var(--deep)}
+  .card{width:920px;max-width:96%;background:#fff;border-radius:18px;padding:26px;box-shadow:0 20px 60px rgba(11,7,23,0.06);position:relative;overflow:hidden;text-align:center}
+  #passwordScreen{padding:18px}
+  #passwordInput{padding:12px 14px;border-radius:12px;border:1px solid rgba(91,33,52,0.06);width:260px;font-size:16px}
+  #enterBtn{margin-left:8px;padding:12px 18px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+  .envelope-wrap{margin-top:18px}
+  .envelope{width:420px;height:260px;margin:18px auto;position:relative;border-radius:14px;background:linear-gradient(180deg,#ffd2e2,#ffb0cc);cursor:pointer;box-shadow:0 12px 40px rgba(139,24,60,0.08)}
+  .envelope::before{content:'';position:absolute;left:0;right:0;top:0;height:52%;background:linear-gradient(180deg,#ff9bb4,#ff6f93);clip-path:polygon(0 0,100% 0,50% 100%);transition:transform .7s}
+  .envelope.open::before{transform:translateY(-160%);opacity:0}
+  #messageBox{display:none;background:linear-gradient(180deg,#fff7fb,#fff);padding:18px;border-radius:12px;margin-top:12px;border:1px solid rgba(255,92,138,0.06);font-size:16px}
+  .sky{position:absolute;inset:0;pointer-events:none}
+  .floating-heart{position:absolute;width:58px;height:58px;transform:rotate(-25deg);border-radius:12px;background:linear-gradient(180deg,#ff6f93,#ff3b7a);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;box-shadow:0 8px 20px rgba(139,24,60,0.12);opacity:0;}
+
+  /* FIXED: removed the second display:flex that was making it visible */
+  #bigHeart{
+    display:none;
+    margin:20px auto;
+    width:320px;
+    height:auto;
+    min-height:320px;
+    border-radius:24px;
+    background:linear-gradient(180deg,#ff6a97,#ff3b7a);
+    color:#fff;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    text-align:center;
+    font-weight:600;
+    font-size:16px;
+    line-height:1.5;
+    flex-direction:column;
+  }
+
+  #countdown{margin-top:12px;font-weight:800;color:var(--deep)}
+  .confetti{position:fixed;left:0;right:0;top:0;bottom:0;pointer-events:none;overflow:hidden}
+  .confetti-piece{position:absolute;width:10px;height:18px;border-radius:2px}
+  @media (max-width:600px){.envelope{width:320px;height:200px}.card{padding:16px}}
+</style>
+</head>
+<body>
+<div class="card" role="main">
+  <h1 style="font-family:'Great Vibes',cursive;font-size:36px;margin:6px 0;color:var(--accent)">For My Rishi</h1>
+
+  <div id="passwordScreen">
+    <label for="passwordInput" style="font-weight:700;margin-right:8px">Enter password:</label>
+    <input id="passwordInput" placeholder="Enter password..." />
+    <button id="enterBtn">Unlock</button>
+    <div style="margin-top:10px;font-size:13px;color:#7a465d">(Hint: It's a short date you already know)</div>
+  </div>
+
+  <div class="envelope-wrap">
+    <div id="envelope" class="envelope"></div>
+    <div style="font-size:14px;color:#7a465d;margin-top:8px">Tap the envelope after unlocking</div>
+  </div>
+
+  <div id="messageBox">
+    <p><strong>Rishi, ik abhi bohot din baaki hain aapke birthday ke liye… but I just can’t wait.</strong></p>
+    <p>I don’t even know why, but this time I’m genuinely so excited for your birthday. Maybe because I just want to make you feel special in every little way I can.</p>
+    <p>So this is your pre-birthday gift… something small from my side. It may not be perfect, but it’s made with all my heart. I love making you smile, I love surprising you… and I seriously can’t wait for 25th January.</p>
+    <p>Until then… enjoy this little gift from me to you. ❤️</p>
+    <div id="floatingHearts">(hearts floating around for you)</div>
+    <div id="countdown"></div>
+  </div>
+
+  <div id="bigHeart">
+    Happy Birthday, babe ❤️<br><br>
+    To the one I love the most…<br><br>
+    Honestly, I don’t even know where to start. Every time I try to write something for you, my mind just stops because my heart starts feeling too much. I’m sooo sooo happy to have you in my life… like genuinely, from the bottom of my heart.<br><br>
+    You don’t even realise how special you are to me. You make my days lighter, my moods better, my life softer. The way you talk, laugh, irritate me, care for me… everything about you just makes me love you even more.<br><br>
+    I don’t know what I did to deserve someone like you, but I’m grateful every single day that you’re mine.<br><br>
+    Thank you for being my happiness, my comfort, my safe place, my person.<br><br>
+    I love you, babe… more than I can ever put into words.<br><br>
+    And on your birthday… all I wish is that you stay this happy, this loved, this blessed, always.
+  </div>
+
+  <div id="confettiArea" class="confetti"></div>
+  <div class="sky"></div>
+</div>
+
+<script>
+const CORRECT = 'Dec1';
+
+function nextJan25() {
+  const now = new Date();
+  let year = now.getFullYear();
+  const target = new Date(`January 25, ${year} 00:00:00`);
+  if (target <= now) target.setFullYear(year + 1);
+  return target.getTime();
+}
+
+const enterBtn = document.getElementById('enterBtn');
+const passwordInput = document.getElementById('passwordInput');
+const passwordScreen = document.getElementById('passwordScreen');
+const envelope = document.getElementById('envelope');
+const envelopeWrap = document.querySelector('.envelope-wrap');
+const messageBox = document.getElementById('messageBox');
+const countdownEl = document.getElementById('countdown');
+const bigHeart = document.getElementById('bigHeart');
+const confettiArea = document.getElementById('confettiArea');
+const sky = document.querySelector('.sky');
+
+enterBtn.addEventListener('click', () => {
+  if (passwordInput.value.trim() === CORRECT) {
+    passwordScreen.style.display = 'none';
+    envelopeWrap.style.display = 'block';
+    envelope.style.boxShadow = '0 18px 50px rgba(139,24,60,0.16)';
+  } else {
+    alert('Wrong password — try again');
+  }
+});
+
+envelope.addEventListener('click', () => {
+  envelope.classList.add('open');
+  setTimeout(() => {
+    messageBox.style.display = 'block';
+    startCountdown();
+    startFloatingHearts();
+  }, 700);
+});
+
+let countdownTimer = null;
+
+function startCountdown(){
+  const target = nextJan25();
+  countdownTimer = setInterval(() => {
+    const now = Date.now();
+    const diff = target - now;
+
+    if (diff <= 0) {
+      clearInterval(countdownTimer);
+      countdownEl.textContent = "It's your birthday! 🎉";
+      bigHeart.style.display = 'flex';
+      setTimeout(launchConfetti, 300);
+      return;
+    }
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+    const seconds = Math.floor((diff%(1000*60))/1000);
+    countdownEl.textContent = `Countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }, 1000);
+}
+
+let heartInterval = null;
+
+function startFloatingHearts(){
+  if (heartInterval) return;
+  heartInterval = setInterval(() => {
+    const h = document.createElement('div');
+    h.className = 'floating-heart';
+    h.textContent = 'Rishi';
+    h.style.left = Math.random()*90 + '%';
+    h.style.bottom = '-30px';
+    const s = 36 + Math.random()*30;
+    h.style.width = s+'px';
+    h.style.height = s+'px';
+    h.style.fontSize = (s/4)+'px';
+    sky.appendChild(h);
+    h.animate([
+      { transform: 'translateY(0) rotate(-25deg)', opacity: 1 },
+      { transform: `translateY(-120vh) rotate(10deg)`, opacity: 0 }
+    ], { duration: 8000 + Math.random()*6000, easing: 'linear' });
+    setTimeout(() => h.remove(), 14000);
+  }, 500);
+}
+
+function launchConfetti(){
+  const colors = ['#ff4d6d','#ffd36b','#7be495','#9bd5ff','#ff9bd6'];
+  for (let i=0;i<80;i++){
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.left = Math.random()*100 + '%';
+    el.style.top = '-10%';
+    el.style.width = (6+Math.random()*10)+'px';
+    el.style.height = (8+Math.random()*14)+'px';
+    el.style.transform = `rotate(${Math.random()*360}deg)`;
+    confettiArea.appendChild(el);
+    el.animate([
+      { transform: `translateY(0) rotate(${Math.random()*360}deg)`, opacity:1 },
+      { transform: `translateY(120vh) rotate(${Math.random()*720}deg)`, opacity:0 }
+    ], { duration: 3000+Math.random()*3000});
+    setTimeout(()=>el.remove(),7000);
+  }
+}
+
+envelopeWrap.style.display = 'none';
+</script>
+</body>
+</html>
